@@ -77,6 +77,23 @@ function scrapeMedium() {
       firestore
         .collection("users")
         .doc(user.uid)
+        .set({
+          name: user.displayName,
+          email: user.email
+        });
+
+      firestore
+        .collection("users")
+        .doc(user.uid)
+        .collection("papers")
+        .doc("LOW4ylqnZpNoCSXJiVYq")
+        .set({
+          placeholder: ""
+        });
+
+      firestore
+        .collection("users")
+        .doc(user.uid)
         .collection("papers")
         .doc("LOW4ylqnZpNoCSXJiVYq")
         .collection("articles")

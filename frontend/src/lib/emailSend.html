@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <title>Sunday Paper</title>
+</head>
+
+<body>
+
+  <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDuUOjt5r7wAl0f5WvRSLOSwDjxtzkVwXg",
+      authDomain: "sunday-paper-2018.firebaseapp.com",
+      databaseURL: "https://sunday-paper-2018.firebaseio.com",
+      projectId: "sunday-paper-2018",
+      storageBucket: "sunday-paper-2018.appspot.com",
+      messagingSenderId: "298992067325"
+    };
+    firebase.initializeApp(config);
+    firebase.firestore().settings({ timestampsInSnapshots: true })
+  </script>
+
+  <script>
+    async function handleButtonClick() {
+      var sendEmail = firebase.functions().httpsCallable("sendEmail");
+
+      firebase.firestore().collection("users").get().then(snapshot => {
+        snapshot.forEach(doc => {
+          sendEmail({
+            email: doc.data().email,
+            subject: "Your Sunday Paper is here!",
+            content: "https://sunday-paper-2018.firebaseapp.com/" + doc.id + "/paper/LOW4ylqnZpNoCSXJiVYq"
+          }).then(
+            function (result) {
+              console.log("Email sent successfully");
+            },
+            err => console.error
+          );
+        })
+      })
+
+      // sendEmail({
+      //   email: "panchaldpranav@gmail.com",
+      //   subject: "Your Sunday Paper is here!",
+      //   content: "https://sunday-paper-2018/" + "LOW4ylqnZpNoCSXJiVYq"
+      // }).then(
+      //   function (result) {
+      //     console.log("Email sent successfully");
+      //   },
+      //   err => console.error
+      // );
+
+
+    }
+  </script>
+
+  <button onclick="handleButtonClick()">click me</button>
+
+
+  <div id="root"></div>
+</body>
+
+</html>
